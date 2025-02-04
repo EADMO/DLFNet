@@ -1,6 +1,7 @@
+# It's just a preview now
 <div align="center">
 
-# dlfNet: Cross Layer Refinement Network for Lane Detection
+# Dynamic Lane Feature Network: A Multi-Scale Fusion Framework for Accurate Lane Detection
 
 </div>
 
