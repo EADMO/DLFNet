@@ -2,7 +2,7 @@ net = dict(type='Detector', )
 
 backbone = dict(
     type='ResNetWrapper',
-    resnet='resnet34',
+    resnet='resnet101',
     pretrained=True,
     replace_stride_with_dilation=[False, False, False],
     out_conv=False,
@@ -12,7 +12,7 @@ num_points = 72
 max_lanes = 4
 sample_y = range(589, 230, -20)
 
-heads = dict(type='dlfHead',
+heads = dict(type='DLFHead',
              num_priors=192,
              refine_layers=3,
              fc_hidden_dim=64,
@@ -23,11 +23,17 @@ cls_loss_weight = 2.
 xyt_loss_weight = 0.2
 seg_loss_weight = 1.0
 
-work_dirs = "work_dirs/dlf/r34_culane"
+work_dirs = "work_dirs/dlf/r101_culane"
+
+# neck = dict(type='FPN',
+#             in_channels=[512, 1024, 2048],
+#             out_channels=64,
+#             num_outs=3,
+#             attention=False)
 
 neck = dict(
     type='LBFPN',
-    in_channels=[128, 256, 512], 
+    in_channels=[512, 1024, 2048], 
     out_channels=64,  
     num_outs=3,  
     start_level=0,  
@@ -43,10 +49,10 @@ neck = dict(
 
 test_parameters = dict(conf_threshold=0.4, nms_thres=50, nms_topk=max_lanes)
 
-epochs = 18
-batch_size = 24
+epochs = 20 
+batch_size = 12
 
-optimizer = dict(type='AdamW', lr=0.6e-3)  # 3e-4 for batchsize 8
+optimizer = dict(type='AdamW', lr=0.3e-3)  # 3e-4 for batchsize 8
 total_iter = (88880 // batch_size) * epochs
 scheduler = dict(type='CosineAnnealingLR', T_max=total_iter)
 

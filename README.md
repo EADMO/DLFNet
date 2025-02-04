@@ -1,14 +1,4 @@
 <div align="center">
-  
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/dlfnet-cross-layer-refinement-network-for/lane-detection-on-culane)](https://paperswithcode.com/sota/lane-detection-on-culane?p=dlfnet-cross-layer-refinement-network-for)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/dlfnet-cross-layer-refinement-network-for/lane-detection-on-llamas)](https://paperswithcode.com/sota/lane-detection-on-llamas?p=dlfnet-cross-layer-refinement-network-for)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/dlfnet-cross-layer-refinement-network-for/lane-detection-on-tusimple)](https://paperswithcode.com/sota/lane-detection-on-tusimple?p=dlfnet-cross-layer-refinement-network-for)
-
-
-</div>
-
-
-<div align="center">
 
 # dlfNet: Cross Layer Refinement Network for Lane Detection
 
@@ -36,7 +26,7 @@ Only test on Ubuntu18.04 and 20.04 with:
 Clone this code to your workspace. 
 We call this directory as `$dlfNET_ROOT`
 ```Shell
-git clone https://github.com/Turoad/dlfnet
+git clone https://github.com/EADMO/DLFNet.git
 ```
 
 ### Create a conda virtual environment and activate it (conda is optional)
@@ -67,7 +57,7 @@ python setup.py build develop
 Download [CULane](https://xingangpan.github.io/projects/CULane.html). Then extract them to `$CULANEROOT`. Create link to `data` directory.
 
 ```Shell
-cd $dlfNET_ROOT
+cd $DLFNET_ROOT
 mkdir -p data
 ln -s $CULANEROOT data/CULane
 ```
@@ -84,7 +74,7 @@ $CULANEROOT/list                 # data lists
 Download [Tusimple](https://github.com/TuSimple/tusimple-benchmark/issues/3). Then extract them to `$TUSIMPLEROOT`. Create link to `data` directory.
 
 ```Shell
-cd $dlfNET_ROOT
+cd $DLFNET_ROOT
 mkdir -p data
 ln -s $TUSIMPLEROOT data/tusimple
 ```
@@ -105,24 +95,6 @@ python tools/generate_seg_tusimple.py --root $TUSIMPLEROOT
 # this will generate seg_label directory
 ```
 
-#### LLAMAS
-Dowload [LLAMAS](https://unsupervised-llamas.com/llamas/). Then extract them to `$LLAMASROOT`. Create link to `data` directory.
-
-```Shell
-cd $dlfNET_ROOT
-mkdir -p data
-ln -s $LLAMASROOT data/llamas
-```
-
-Unzip both files (`color_images.zip` and `labels.zip`) into the same directory (e.g., `data/llamas/`), which will be the dataset's root. For LLAMAS, you should have structure like this:
-```
-$LLAMASROOT/color_images/train # data folders
-$LLAMASROOT/color_images/test # data folders
-$LLAMASROOT/color_images/valid # data folders
-$LLAMASROOT/labels/train # labels folders
-$LLAMASROOT/labels/valid # labels folders
-```
-
 
 ## Getting Started
 
@@ -134,7 +106,7 @@ python main.py [configs/path_to_your_config] --gpus [gpu_num]
 
 For example, run
 ```Shell
-python main.py configs/dlfnet/dlf_resnet18_culane.py --gpus 0
+python main.py configs/resnet18_culane.py --gpus 0
 ```
 
 ### Validation
@@ -145,7 +117,7 @@ python main.py [configs/path_to_your_config] --[test|validate] --load_from [path
 
 For example, run
 ```Shell
-python main.py configs/dlfnet/dlf_dla34_culane.py --validate --load_from culane_dla34.pth --gpus 0
+python main.py configs/dla34_culane.py --validate --load_from culane_dla34.pth --gpus 0
 ```
 
 Currently, this code can output the visualization result when testing, just add `--view`.
@@ -177,30 +149,10 @@ We will get the visualization result in `work_dirs/xxx/xxx/visualization`.
 
 
 
-### LLAMAS
-|   Backbone    |  <center>  valid <br><center> &nbsp; mF1 &nbsp; &nbsp;  &nbsp;F1@50 &nbsp; F1@75     | <center>  test <br> F1@50 |
-|  :---:  |    :---:    |        :---:|
-| [ResNet-18][assets] |  <center> 70.83  &nbsp; &nbsp; 96.93 &nbsp; &nbsp; 85.23 | 96.00 |
-| [DLA-34][assets]     |  <center> 71.57 &nbsp; &nbsp;  97.06  &nbsp; &nbsp; 85.43  |   96.12 |
-
-“F1@50” refers to the official metric, i.e., F1 score when IoU threshold is 0.5 between the gt and prediction. "F1@75" is the F1 score when IoU threshold is 0.75.
-
-## Citation
-
-If our paper and code are beneficial to your work, please consider citing:
-```
-@InProceedings{Zheng_2022_CVPR,
-    author    = {Zheng, Tu and Huang, Yifei and Liu, Yang and Tang, Wenjian and Yang, Zheng and Cai, Deng and He, Xiaofei},
-    title     = {dlfNet: Cross Layer Refinement Network for Lane Detection},
-    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-    month     = {June},
-    year      = {2022},
-    pages     = {898-907}
-}
-```
 
 ## Acknowledgement
 <!--ts-->
+* [Turoad/clrnet](https://github.com/Turoad/clrnet)
 * [open-mmlab/mmdetection](https://github.com/open-mmlab/mmdetection)
 * [pytorch/vision](https://github.com/pytorch/vision)
 * [Turoad/lanedet](https://github.com/Turoad/lanedet)

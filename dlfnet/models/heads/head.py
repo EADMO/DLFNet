@@ -20,7 +20,7 @@ from ..registry import HEADS
 
 
 @HEADS.register_module
-class dlfHead(nn.Module):
+class DLFHead(nn.Module):
     def __init__(self,
                  num_points=72,
                  prior_feat_channels=64,
@@ -30,7 +30,7 @@ class dlfHead(nn.Module):
                  refine_layers=3,
                  sample_points=36,
                  cfg=None):
-        super(dlfHead, self).__init__()
+        super(DLFHead, self).__init__()
         self.cfg = cfg
         self.img_w = self.cfg.img_w
         self.img_h = self.cfg.img_h

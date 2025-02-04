@@ -1,1 +1,1 @@
-from .dlf_head import dlfHead
+from .head import DLFHead

@@ -2,7 +2,7 @@ net = dict(type='Detector', )
 
 backbone = dict(
     type='ResNetWrapper',
-    resnet='resnet101',
+    resnet='resnet18',
     pretrained=True,
     replace_stride_with_dilation=[False, False, False],
     out_conv=False,
@@ -12,7 +12,7 @@ num_points = 72
 max_lanes = 5
 sample_y = range(710, 150, -10)
 
-heads = dict(type='dlfHead',
+heads = dict(type='DLFHead',
              num_priors=192,
              refine_layers=3,
              fc_hidden_dim=64,
@@ -23,13 +23,13 @@ cls_loss_weight = 6.
 xyt_loss_weight = 0.5
 seg_loss_weight = 1.0
 
-work_dirs = "work_dirs/dlf/r101_tusimple"
+work_dirs = "work_dirs/dlf/r18_tusimple"
 
 neck = dict(
     type='LBFPN',
-    in_channels=[512, 1024, 2048], 
+    in_channels=[64, 128, 256, 512], 
     out_channels=64,  
-    num_outs=3,  
+    num_outs=4,  
     start_level=0,  
     end_level=-1, 
     add_extra_convs=False, 
@@ -43,14 +43,14 @@ neck = dict(
 
 test_parameters = dict(conf_threshold=0.40, nms_thres=50, nms_topk=max_lanes)
 
-epochs = 70 
-batch_size = 10 
+epochs = 70
+batch_size = 40
 
-optimizer = dict(type='AdamW', lr=0.3e-3)  # 3e-4 for batchsize 8
+optimizer = dict(type='AdamW', lr=1.0e-3)  # 3e-4 for batchsize 8
 total_iter = (3616 // batch_size + 1) * epochs
 scheduler = dict(type='CosineAnnealingLR', T_max=total_iter)
 
-eval_ep = 1
+eval_ep = 3
 save_ep = epochs
 
 img_norm = dict(mean=[103.939, 116.779, 123.68], std=[1., 1., 1.])
