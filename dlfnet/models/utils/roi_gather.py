@@ -7,7 +7,7 @@ from mmcv.cnn import ConvModule
 class CBAM(nn.Module):
     def __init__(self, in_channels, reduction_ratio=4, kernel_size=7):
         super(CBAM, self).__init__()
-        # 通道注意力模块
+        # channel attention
         self.channel_attention = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
             nn.Conv2d(in_channels, in_channels // reduction_ratio, kernel_size=1, bias=False),
@@ -15,22 +15,21 @@ class CBAM(nn.Module):
             nn.Conv2d(in_channels // reduction_ratio, in_channels, kernel_size=1, bias=False),
             nn.Sigmoid()
         )
-        # 空间注意力模块
+        # Spatial attention
         self.spatial_attention = nn.Sequential(
             nn.Conv2d(2, 1, kernel_size=kernel_size, padding=kernel_size // 2, bias=False),
             nn.Sigmoid()
         )
 
     def forward(self, x):
-        # 通道注意力
         ca = self.channel_attention(x)
         x = x * ca
 
-        # 空间注意力
         max_pool = torch.max(x, dim=1, keepdim=True)[0]
         avg_pool = torch.mean(x, dim=1, keepdim=True)
         sa = self.spatial_attention(torch.cat([max_pool, avg_pool], dim=1))
         x = x * sa
+
         return x
 
 def LinearModule(hidden_dim):
@@ -122,14 +121,14 @@ class ROIGather(nn.Module):
 
         self.fc_norm = nn.LayerNorm(fc_hidden_dim)
 
-        self.cbam = CBAM(mid_channels) # choose1
+        self.cbam = CBAM(mid_channels)
 
 
     def roi_fea(self, x, layer_index):
         feats = []
         for i, feature in enumerate(x):
             feat_trans = self.convs[i](feature)
-            feat_trans = self.cbam(feat_trans) # choose1
+            feat_trans = self.cbam(feat_trans)
             feats.append(feat_trans)
         cat_feat = torch.cat(feats, dim=1)
         cat_feat = self.catconv[layer_index](cat_feat)

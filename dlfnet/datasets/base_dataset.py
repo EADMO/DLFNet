@@ -8,9 +8,21 @@ import torchvision
 import logging
 from .registry import DATASETS
 from .process import Process
-from dlfnet.utils.visualization import imshow_lanes
+from clrnet.utils.visualization import imshow_lanes
 from mmcv.parallel import DataContainer as DC
 
+def load_culane_img_data(path):
+    with open(path, 'r') as data_file:
+        img_data = data_file.readlines()
+    img_data = [line.split() for line in img_data]
+    img_data = [list(map(float, lane)) for lane in img_data]
+    img_data = [[(lane[i], lane[i + 1]) for i in range(0, len(lane), 2)]
+                for lane in img_data]
+    img_data = [lane for lane in img_data if len(lane) >= 2]
+
+    return img_data
+
+# cnt = 0
 
 @DATASETS.register_module
 class BaseDataset(Dataset):
@@ -30,6 +42,18 @@ class BaseDataset(Dataset):
                                 img_name.replace('/', '_'))
             lanes = [lane.to_array(self.cfg) for lane in lanes]
             imshow_lanes(img, lanes, out_file=out_file)
+
+    def view_gt(self, img_metas):
+        img_metas = [item for img_meta in img_metas.data for item in img_meta]
+        global cnt
+        for img_meta in img_metas:
+            img_name = img_meta['img_name']
+            img = cv2.imread(osp.join(self.data_root, img_name))
+            origin = load_culane_img_data(osp.join(self.data_root, img_name).rstrip().replace(
+                    '.jpg', '.lines.txt'))
+            out_file = osp.join(self.cfg.work_dir, 'visualization',
+                                img_name.replace('/', '_'))
+            imshow_lanes(img, origin, out_file=out_file)
 
     def __len__(self):
         return len(self.data_infos)

@@ -1,17 +1,17 @@
 <div align="center">
 
-# dlfNet: Cross Layer Refinement Network for Lane Detection
+# Dynamic Lane Feature Network: Multi-Scale Dynamic Weighted Lane Feature Network for Complex Scenes
 
 </div>
 
 
 
-Pytorch implementation of the paper "[dlfNet: Cross Layer Refinement Network for Lane Detection](https://arxiv.org/abs/2203.10350)" (CVPR2022 Acceptance).
+Pytorch implementation of the paper "[Dynamic Lane Feature Network: Multi-Scale Dynamic Weighted Lane Feature Network for Complex Scenes]
 
 ## Introduction
-![Arch](.github/arch.png)
-- dlfNet exploits more contextual information to detect lanes while leveraging local detailed lane features to improve localization accuracy. 
-- dlfNet achieves SOTA result on CULane, Tusimple, and LLAMAS datasets.
+![Arch](.github/model.jpg)
+- DLFNet is based on the BiFPN concept and the way humans perceive and reason about lane lines in the real world, achieving the integration of global semantic information with local feature details.
+-   In culane and tusimple, the performance is superior , especially at high IOU threshold
 
 ## Installation
 
@@ -24,7 +24,7 @@ Only test on Ubuntu18.04 and 20.04 with:
 
 ### Clone this repository
 Clone this code to your workspace. 
-We call this directory as `$dlfNET_ROOT`
+We call this directory as `$DLFNET_ROOT`
 ```Shell
 git clone https://github.com/EADMO/DLFNet.git
 ```
@@ -120,14 +120,14 @@ For example, run
 python main.py configs/dla34_culane.py --validate --load_from culane_dla34.pth --gpus 0
 ```
 
-Currently, this code can output the visualization result when testing, just add `--view`.
+At present, this code can output the visual results and GT . You only need to add add `--view` or `--view_gt`
 We will get the visualization result in `work_dirs/xxx/xxx/visualization`.
 
 
 ## Results
-![F1 vs. Latency for SOTA methods on the lane detection](.github/latency_f1score.png)
+![F1 vs. Latency for SOTA methods on the lane detection](.github/fig.jpg)
 
-[assets]: https://github.com/turoad/dlfNet/releases
+[assets]: https://github.com/EADMO/DLFNet/releases
 
 ### CULane
 

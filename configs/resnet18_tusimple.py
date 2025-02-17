@@ -25,21 +25,10 @@ seg_loss_weight = 1.0
 
 work_dirs = "work_dirs/dlf/r18_tusimple"
 
-neck = dict(
-    type='LBFPN',
-    in_channels=[64, 128, 256, 512], 
-    out_channels=64,  
-    num_outs=4,  
-    start_level=0,  
-    end_level=-1, 
-    add_extra_convs=False, 
-    no_norm_on_lateral=False, 
-    use_attention=True,
-    conv_cfg=None,
-    norm_cfg=dict(type='BN', requires_grad=True),
-    act_cfg=dict(type='ReLU', inplace=True),
-    upsample_cfg=dict(mode='bilinear', align_corners=False)
-)
+neck = dict(type='LBFPN',
+            in_channels=[64, 128, 256, 512], 
+            out_channels=64,  
+            num_outs=4)
 
 test_parameters = dict(conf_threshold=0.40, nms_thres=50, nms_topk=max_lanes)
 

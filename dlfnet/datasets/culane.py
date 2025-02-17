@@ -127,6 +127,14 @@ class CULane(BaseDataset):
                       'w') as out_file:
                 out_file.write(output)
 
+        # draw line with iou
+        # culane_metric.draw_lanes_by_iou(output_basedir,
+        #                                 self.data_root,
+        #                                 self.list_path,
+        #                                 save_dir = "work_iou",
+        #                                 iou_threshold=0.75,
+        #                                 official=True)
+
         for cate, cate_file in CATEGORYS.items():
             result = culane_metric.eval_predictions(output_basedir,
                                                     self.data_root,

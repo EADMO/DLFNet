@@ -130,18 +130,43 @@ class Runner(object):
                                                is_train=False)
         self.net.eval()
         predictions = []
+
+        total_time = 0  # 总推理时间
+        num_samples = 0  # 样本总数
+        
         for i, data in enumerate(tqdm(self.val_loader, desc=f'Validate')):
             data = self.to_cuda(data)
             with torch.no_grad():
+                start_time = time.time()  # 开始计时
                 output = self.net(data)
                 output = self.net.module.heads.get_lanes(output)
+                end_time = time.time()  # 结束计时
+
+                # 记录推理时间和样本数
+                batch_time = end_time - start_time
+                total_time += batch_time
+                num_samples += data['img'].shape[0]  # 批次中的图片数量
+
                 predictions.extend(output)
             if self.cfg.view:
                 self.val_loader.dataset.view(output, data['meta'])
+        # 计算推理速度
+        avg_time_per_image = total_time / num_samples
+        fps = 1.0 / avg_time_per_image
+        self.recorder.logger.info(f"平均推理时间：{avg_time_per_image:.4f} 秒/张")
+        self.recorder.logger.info(f"推理帧率：{fps:.2f} FPS")
 
         metric = self.val_loader.dataset.evaluate(predictions,
                                                   self.cfg.work_dir)
         self.recorder.logger.info('metric: ' + str(metric))
+
+    def view_gt(self):
+        if not self.test_loader:
+            self.test_loader = build_dataloader(self.cfg.dataset.test,
+                                                self.cfg,
+                                                is_train=False)
+        for i, data in enumerate(tqdm(self.test_loader, desc=f'Generating')):
+            self.test_loader.dataset.view_gt(data['meta'])
 
     def save_ckpt(self, is_best=False):
         save_model(self.net, self.optimizer, self.scheduler, self.recorder,

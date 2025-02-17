@@ -35,6 +35,8 @@ def main():
         runner.validate()
     elif args.test:
         runner.test()
+    elif args.view_gt:
+        runner.view_gt()
     else:
         runner.train()
 
@@ -58,6 +60,10 @@ def parse_args():
     parser.add_argument('--view', action='store_true', help='whether to view')
     parser.add_argument(
         '--validate',
+        action='store_true',
+        help='whether to evaluate the checkpoint during training')
+    parser.add_argument(
+        '--view_gt',
         action='store_true',
         help='whether to evaluate the checkpoint during training')
     parser.add_argument(

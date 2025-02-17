@@ -118,6 +118,76 @@ def load_culane_img_data(path):
     return img_data
 
 
+def saveimg_iou(pred,
+                anno,
+                pred_path,
+                width=30,
+                official=True,
+                iou_threshold=0.75,
+                save_dir = "work_iou",
+                anno_dir = "./data/CULane",
+                img_shape=(590, 1640, 3)):
+    import os.path as osp
+    import cv2
+    interp_pred = np.array([interp(pred_lane, n=5) for pred_lane in pred],
+                           dtype=object)  # (4, 50, 2)
+    interp_anno = np.array([interp(anno_lane, n=5) for anno_lane in anno],
+                           dtype=object)  # (4, 50, 2)
+
+    if official:
+        ious = discrete_cross_iou(interp_pred,
+                                  interp_anno,
+                                  width=width,
+                                  img_shape=img_shape)
+    else:
+        ious = continuous_cross_iou(interp_pred,
+                                    interp_anno,
+                                    width=width,
+                                    img_shape=img_shape)
+
+    row_ind, col_ind = linear_sum_assignment(1 - ious)
+    
+
+    parts = pred_path.split('/') 
+    driver, video, frame = parts[-3], parts[-2], parts[-1].replace('.lines.txt', '.jpg')
+    img_name = f"{driver}_{video}_{frame}"
+    img_path = osp.join(anno_dir, driver, video, frame)
+    save_dir = osp.join(parts[0], parts[1], parts[2], parts[3], save_dir)
+    os.makedirs(save_dir, exist_ok=True)
+
+    save_dir = osp.join(save_dir, img_name)
+    
+    if not osp.exists(img_path):
+        print(">>> can't open imgpath <<<")
+        return 
+    
+    img = cv2.imread(img_path)
+
+    for i in range(len(row_ind)):
+        if ious[row_ind[i], col_ind[i]] > iou_threshold:
+            color = (0, 0, 255)  # red
+        else:
+            color = (0, 255, 0)  # green
+        pred_lane = pred[row_ind[i]] 
+        for j in range(len(pred_lane) - 1):
+            pt1 = (int(pred_lane[j][0]), int(pred_lane[j][1]))
+            pt2 = (int(pred_lane[j + 1][0]), int(pred_lane[j + 1][1]))
+            cv2.line(img, pt1, pt2, color, thickness=4)  # 以红色绘制预测车道线
+    cv2.imwrite(save_dir, img)
+    
+    origin_dir = "origin"
+    save_origin_dir = osp.join(parts[0], parts[1], parts[2], parts[3], origin_dir)
+    os.makedirs(save_origin_dir, exist_ok=True)
+    save_origin_dir = osp.join(save_origin_dir, img_name)
+    img1 = cv2.imread(img_path)
+    for i in range(len(anno)):
+        lane = anno[i]
+        for j in range(len(lane) - 1):
+            pt1 = (int(lane[j][0]), int(lane[j][1]))
+            pt2 = (int(lane[j + 1][0]), int(lane[j + 1][1]))
+            cv2.line(img1, pt1, pt2, (0, 0, 255), thickness=4)
+    cv2.imwrite(save_origin_dir, img1)
+
 def load_culane_data(data_dir, file_list_path):
     with open(file_list_path, 'r') as file_list:
         filepaths = [
@@ -131,7 +201,30 @@ def load_culane_data(data_dir, file_list_path):
         img_data = load_culane_img_data(path)
         data.append(img_data)
 
-    return data
+    return data, filepaths
+
+def draw_lanes_by_iou(pred_dir, 
+                      anno_dir, 
+                      list_path, 
+                      save_dir = "work_iou",
+                      iou_threshold=0.75, 
+                      width=30, 
+                      official=True):
+    import logging
+    from clrnet.utils.visualization import imshow_lanes
+    logger = logging.getLogger(__name__)
+    logger.info(f'Saving imgs over IoU@{iou_threshold} for List: {list_path}')
+    predictions, predfilepaths = load_culane_data(pred_dir, list_path)
+    annotations, annofilepaths = load_culane_data(anno_dir, list_path)
+    img_shape = (590, 1640, 3)
+    ious = list(map(partial(saveimg_iou,
+                    width=width,
+                    official=official,
+                    iou_threshold=iou_threshold,
+                    save_dir = save_dir,
+                    anno_dir = anno_dir,
+                    img_shape=img_shape), predictions, annotations, predfilepaths))
+    
 
 def eval_predictions(pred_dir,
                      anno_dir,
@@ -143,8 +236,8 @@ def eval_predictions(pred_dir,
     import logging
     logger = logging.getLogger(__name__)
     logger.info('Calculating metric for List: {}'.format(list_path))
-    predictions = load_culane_data(pred_dir, list_path)
-    annotations = load_culane_data(anno_dir, list_path)
+    predictions, predfilepaths = load_culane_data(pred_dir, list_path)
+    annotations, annofilepaths = load_culane_data(anno_dir, list_path)
     img_shape = (590, 1640, 3)
     if sequential:
         results = map(

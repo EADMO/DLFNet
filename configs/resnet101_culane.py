@@ -25,27 +25,10 @@ seg_loss_weight = 1.0
 
 work_dirs = "work_dirs/dlf/r101_culane"
 
-# neck = dict(type='FPN',
-#             in_channels=[512, 1024, 2048],
-#             out_channels=64,
-#             num_outs=3,
-#             attention=False)
-
-neck = dict(
-    type='LBFPN',
-    in_channels=[512, 1024, 2048], 
-    out_channels=64,  
-    num_outs=3,  
-    start_level=0,  
-    end_level=-1, 
-    add_extra_convs=False, 
-    no_norm_on_lateral=False, 
-    use_attention=True,
-    conv_cfg=None,
-    norm_cfg=dict(type='BN', requires_grad=True),
-    act_cfg=dict(type='ReLU', inplace=True),
-    upsample_cfg=dict(mode='bilinear', align_corners=False)
-)
+neck = dict(type='LBFPN',
+            in_channels=[512, 1024, 2048], 
+            out_channels=64,  
+            num_outs=3)
 
 test_parameters = dict(conf_threshold=0.4, nms_thres=50, nms_topk=max_lanes)
 
@@ -56,8 +39,8 @@ optimizer = dict(type='AdamW', lr=0.3e-3)  # 3e-4 for batchsize 8
 total_iter = (88880 // batch_size) * epochs
 scheduler = dict(type='CosineAnnealingLR', T_max=total_iter)
 
-eval_ep = 1
-save_ep = 1
+eval_ep = 3
+save_ep = 10
 
 img_norm = dict(mean=[103.939, 116.779, 123.68], std=[1., 1., 1.])
 ori_img_w = 1640
