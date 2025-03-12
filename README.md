@@ -10,7 +10,7 @@
 Pytorch implementation of the paper "[Dynamic Lane Feature Network: Multi-Scale Dynamic Weighted Lane Feature Network for Complex Scenes]
 
 ## Introduction
-![Arch](.github/model.jpg)
+![Arch](img/model.jpg)
 - DLFNet is based on the BiFPN concept and the way humans perceive and reason about lane lines in the real world, achieving the integration of global semantic information with local feature details.
 -   In culane and tusimple, the performance is superior , especially at high IOU threshold
 
@@ -126,7 +126,7 @@ We will get the visualization result in `work_dirs/xxx/xxx/visualization`.
 
 
 ## Results
-![F1 vs. Latency for SOTA methods on the lane detection](.github/fig.jpg)
+![Results Show](img/fig.jpg)
 
 [assets]: https://github.com/EADMO/DLFNet/releases
 
