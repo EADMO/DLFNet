@@ -144,9 +144,9 @@ We will get the visualization result in `work_dirs/xxx/xxx/visualization`.
 ### TuSimple
 |   Backbone   |      F1   | Acc |      FDR     |      FNR   |
 |    :---       |          ---:          |       ---:       |       ---:       |      ---:       |
-| [ResNet-18][assets]     |    97.89    |   96.84  |    2.28  |  1.92      | 
-| [ResNet-34][assets]       |   97.82              |    96.87          |   2.27          |    2.08      | 
-| [ResNet-101][assets]      |   97.62|   96.83  |   2.37   |  2.38  |
+| [ResNet-18][assets]     |    97.91    |   96.88  |    2.54  |  1.62      | 
+| [ResNet-34][assets]       |   97.82              |    96.92          |   2.56          |    1.79      | 
+| [ResNet-101][assets]      |   97.89|   96.77  |   1.81   |  2.41  |
 
 
 
