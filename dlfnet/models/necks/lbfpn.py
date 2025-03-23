@@ -6,9 +6,9 @@ from mmcv.cnn import ConvModule
 from ..registry import NECKS
 
 
-class CBAM(nn.Module):
+class CFAM(nn.Module):
     def __init__(self, in_channels, reduction_ratio=4, kernel_size=7):
-        super(CBAM, self).__init__()
+        super(CFAM, self).__init__()
         # channel attention
         self.channel_attention = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
@@ -95,8 +95,8 @@ class LBFPN(nn.Module):
                     act_cfg=act_cfg,
                     inplace=False))
             
-        self.cbam_modules = nn.ModuleList([
-            CBAM(out_channels) for _ in range(self.num_ins)
+        self.cfam_modules = nn.ModuleList([
+            CFAM(out_channels) for _ in range(self.num_ins)
         ])
 
         self.fusion_weights = nn.Parameter(torch.ones(num_outs, 4))
@@ -130,7 +130,7 @@ class LBFPN(nn.Module):
             laterals[i] = self.bifpn_convs[i](laterals[i])
 
             # CRBlock
-            laterals[i] = self.cbam_modules[i](laterals[i]) + laterals[i] 
+            laterals[i] = self.cfam_modules[i](laterals[i]) + laterals[i] 
 
         outs = tuple(laterals)
 

@@ -26,9 +26,9 @@ seg_loss_weight = 1.0
 work_dirs = "work_dirs/dlf/r34_culane"
 
 neck = dict(type='LBFPN',
-            in_channels=[128, 256, 512], 
+            in_channels=[64, 128, 256, 512], 
             out_channels=64,  
-            num_outs=3)
+            num_outs=4)
 
 test_parameters = dict(conf_threshold=0.4, nms_thres=50, nms_topk=max_lanes)
 

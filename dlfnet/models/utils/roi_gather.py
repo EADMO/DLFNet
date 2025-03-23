@@ -4,9 +4,9 @@ import torch.nn.functional as F
 from mmcv.cnn import ConvModule
 
 
-class CBAM(nn.Module):
+class CFAM(nn.Module):
     def __init__(self, in_channels, reduction_ratio=4, kernel_size=7):
-        super(CBAM, self).__init__()
+        super(CFAM, self).__init__()
         # channel attention
         self.channel_attention = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
@@ -121,14 +121,14 @@ class ROIGather(nn.Module):
 
         self.fc_norm = nn.LayerNorm(fc_hidden_dim)
 
-        self.cbam = CBAM(mid_channels)
+        self.cfam = CFAM(mid_channels)
 
 
-    def roi_fea(self, x, layer_index):
+    def SharedCFAM(self, x, layer_index):
         feats = []
         for i, feature in enumerate(x):
             feat_trans = self.convs[i](feature)
-            feat_trans = self.cbam(feat_trans)
+            feat_trans = self.cfam(feat_trans)
             feats.append(feat_trans)
         cat_feat = torch.cat(feats, dim=1)
         cat_feat = self.catconv[layer_index](cat_feat)
@@ -144,7 +144,7 @@ class ROIGather(nn.Module):
         Return: 
             roi: prior features with gathered global information, shape: (Batch, num_priors, fc_hidden_dim)
         '''
-        roi = self.roi_fea(roi_features, layer_index)
+        roi = self.SharedCFAM(roi_features, layer_index)
         bs = x.size(0)
         roi = roi.contiguous().view(bs * self.num_priors, -1)
 

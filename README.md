@@ -1,4 +1,3 @@
-# It's just a preview now
 <div align="center">
 
 # Dynamic Lane Feature Network: Multi-Scale Dynamic Weighted Lane Feature Network for Complex Scenes
@@ -134,10 +133,10 @@ We will get the visualization result in `work_dirs/xxx/xxx/visualization`.
 
 |   Backbone  |  mF1 | F1@50  | F1@75 |
 | :---  |  :---:   |   :---:    | :---:|
-| [ResNet-18][assets]     | 55.23  |  79.58   | 62.21 |
-| [ResNet-34][assets]     | 55.14  |  79.73   | 62.11 |
-| [ResNet-101][assets]     | 55.55| 80.13   | 62.96 |
-| [DLA-34][assets]     | 55.64|  80.47   | 62.78 |
+| [ResNet-18][assets]     | 55.35  |  79.77   | 62.64 |
+| [ResNet-34][assets]     | 55.14  |  79.77   | 62.83 |
+| [ResNet-101][assets]     | 55.86 | 80.18   | 63.43 |
+| [DLA-34][assets]     | 56.25 |  80.45   | 63.56 |
 
 
 
