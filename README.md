@@ -1,6 +1,6 @@
 <div align="center">
 
-# Dynamic Lane Feature Network: Multi-Scale Dynamic Weighted Lane Feature Network for Complex Scenes
+# DLFNet: Multi-Scale Dynamic Weighted Lane Feature Network for Complex Scenes
 
 </div>
 
