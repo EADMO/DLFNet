@@ -6,7 +6,7 @@
 
 
 
-Pytorch implementation of the paper "[Dynamic Lane Feature Network: Multi-Scale Dynamic Weighted Lane Feature Network for Complex Scenes]
+Pytorch implementation of the paper "[DLFNet: Multi-Scale Dynamic Weighted Lane Feature Network for Complex Scenes]
 
 ## Introduction
 ![Arch](img/model.jpg)
