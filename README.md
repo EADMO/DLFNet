@@ -41,10 +41,7 @@ conda activate dlfnet
 ```Shell
 # Install pytorch firstly, the cudatoolkit version should be same in your system.
 
-conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
-
-# Or you can install via pip
-pip install torch==1.8.0 torchvision==0.9.0
+conda install pytorch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 cudatoolkit=11.1 -c pytorch -c conda-forge
 
 # Install python packages
 python setup.py build develop
@@ -123,7 +120,11 @@ python main.py configs/dla34_culane.py --validate --load_from culane_dla34.pth -
 At present, this code can output the visual results and GT . You only need to add add `--view` or `--view_gt`
 We will get the visualization result in `work_dirs/xxx/xxx/visualization`.
 
-
+For generate DEMO
+```shell
+python generate_DEMO.py
+```
+Replace image_folder with your visual path
 ## Results
 ![Results Show](img/result.jpg)
 

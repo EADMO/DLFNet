@@ -35,7 +35,7 @@ class CFAM(nn.Module):
 
 
 @NECKS.register_module
-class LBFPN(nn.Module):
+class LBFPN(nn.Module): # LFM
     def __init__(self,
                 in_channels,
                 out_channels,

@@ -23,7 +23,7 @@ seg_loss_weight = 1.0
 
 work_dirs = "work_dirs/dlf/dla34_culane"
 
-neck = dict(type='LBFPN',
+neck = dict(type='LBFPN', # LFM
             in_channels=[64, 128, 256, 512], 
             out_channels=64,  
             num_outs=4)

@@ -8,7 +8,7 @@ import torchvision
 import logging
 from .registry import DATASETS
 from .process import Process
-from clrnet.utils.visualization import imshow_lanes
+from dlfnet.utils.visualization import imshow_lanes
 from mmcv.parallel import DataContainer as DC
 
 def load_culane_img_data(path):
