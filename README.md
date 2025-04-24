@@ -18,8 +18,8 @@ Pytorch implementation of the paper "[DLFNet: Multi-Scale Dynamic Weighted Lane 
 ### Prerequisites
 Only test on Ubuntu18.04 and 20.04 with:
 - Python >= 3.8 (tested with Python3.8)
-- PyTorch >= 1.6 (tested with Pytorch1.6)
-- CUDA (tested with cuda10.2)
+- PyTorch >= 1.6 (tested with Pytorch1.8)
+- CUDA (tested with cuda11.1)
 - Other dependencies described in `requirements.txt`
 
 ### Clone this repository
@@ -120,7 +120,7 @@ python main.py configs/dla34_culane.py --validate --load_from culane_dla34.pth -
 At present, this code can output the visual results and GT . You only need to add add `--view` or `--view_gt`
 We will get the visualization result in `work_dirs/xxx/xxx/visualization`.
 
-For generate DEMO
+For generate DEMO, run
 ```shell
 python generate_DEMO.py
 ```
